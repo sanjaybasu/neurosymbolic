@@ -41,7 +41,7 @@ python3 scripts/04_train_hybrid_detector.py
 
 If you use this code in your research, please cite:
 
-> Basu S, Patel S. Neurosymbolic Learning for Clinical Decision Support in Medicaid Population Health Management. *Scientific Reports* (Under Review). 2025.
+> Basu S, Patel S. Neurosymbolic Learning for Clinical Decision Support in Medicaid Population Health Management. 2025.
 
 ## License
 
