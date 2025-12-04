@@ -10,21 +10,24 @@ Computes sensitivity, specificity, and other performance metrics for each stage.
 import json
 import pickle
 from pathlib import Path
-import pandas as pd
 import sys
 import time
 import numpy as np
+import pandas as pd
 
-# Add models directory to path
-SCRIPT_DIR = Path(__file__).parent
+# Add local modules to path
+SCRIPT_DIR = Path(__file__).resolve().parent
 NEUROSYMBOLIC_DIR = SCRIPT_DIR.parent
+REPO_ROOT = SCRIPT_DIR.parents[3]
 MODELS_DIR = NEUROSYMBOLIC_DIR / "models"
 sys.path.append(str(MODELS_DIR))
+sys.path.append(str(SCRIPT_DIR))
 
 from neurosymbolic_reasoner_v2 import HybridNeurosymbolicReasoner
+from data_utils import parse_multiline_csv
 
 # Data paths
-RL_VS_LLM_DATA = Path("/Users/sanjaybasu/waymark-local/notebooks/rl_vs_llm_safety/data")
+RL_VS_LLM_DATA = REPO_ROOT / "notebooks" / "rl_vs_llm_safety" / "data"
 SCENARIO_LIBRARY = RL_VS_LLM_DATA / "scenario_library.csv"
 BENIGN_CASES = RL_VS_LLM_DATA / "prospective_eval" / "benign_cases_500.csv"
 HARM_CASES = RL_VS_LLM_DATA / "prospective_eval" / "harm_cases_500.csv"
@@ -55,9 +58,9 @@ def load_scenarios_from_csv(csv_path: Path):
 
 
 def load_prospective_cases(benign_path: Path, harm_path: Path):
-    """Load prospective validation cases with correct column mapping."""
-    benign_df = pd.read_csv(benign_path)
-    harm_df = pd.read_csv(harm_path)
+    """Load prospective validation cases with robust CSV parsing."""
+    benign_df = parse_multiline_csv(benign_path, record_prefixes=["benign_candidate"])
+    harm_df = parse_multiline_csv(harm_path, record_prefixes=["harm_candidate"])
     
     scenarios = []
     
@@ -65,7 +68,7 @@ def load_prospective_cases(benign_path: Path, harm_path: Path):
     for idx, row in benign_df.iterrows():
         scenario = {
             'name': f"benign_{idx}",
-            'prompt': row['context_text'],  # FIXED
+            'prompt': row['context_text'],
             'context': {},
             'hazard_type': 'benign'
         }
@@ -75,9 +78,9 @@ def load_prospective_cases(benign_path: Path, harm_path: Path):
     for idx, row in harm_df.iterrows():
         scenario = {
             'name': f"harm_{idx}",
-            'prompt': row['context_text'],  # FIXED
+            'prompt': row['context_text'],
             'context': {},
-            'hazard_type': row.get('harm_type', 'harm')
+            'hazard_type': row.get('harm_type') or 'harm'
         }
         scenarios.append(scenario)
     

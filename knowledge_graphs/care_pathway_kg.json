@@ -1,7 +1,9 @@
 {
   "directed": true,
   "multigraph": false,
-  "graph": {},
+  "graph": {
+    "status": "empty_no_sequences"
+  },
   "nodes": [],
   "links": []
 }

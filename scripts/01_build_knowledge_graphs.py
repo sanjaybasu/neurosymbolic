@@ -266,6 +266,30 @@ class ClinicalKnowledgeGraphBuilder:
                 'severity': 'major',
                 'reason': 'Bronchospasm risk'
             },
+            {
+                'condition': 'Chronic Kidney Disease',
+                'contraindication': 'Metformin',
+                'severity': 'moderate',
+                'reason': 'Lactic acidosis risk'
+            },
+            {
+                'condition': 'Heart Failure',
+                'contraindication': 'NSAIDs',
+                'severity': 'major',
+                'reason': 'Fluid retention and decompensation risk'
+            },
+            {
+                'condition': 'Pregnancy',
+                'contraindication': 'Valproate',
+                'severity': 'severe',
+                'reason': 'Neural tube defect risk'
+            },
+            {
+                'condition': 'Pregnancy',
+                'contraindication': 'Warfarin',
+                'severity': 'severe',
+                'reason': 'Teratogenic effects and fetal bleeding risk'
+            },
             
             # Risk amplification rules
             {
@@ -277,6 +301,26 @@ class ClinicalKnowledgeGraphBuilder:
                 'condition': 'Hypertension',
                 'increases_risk_of': 'Stroke',
                 'risk_multiplier': 3.0
+            },
+            {
+                'condition': 'Chronic Kidney Disease',
+                'increases_risk_of': 'Hyperkalemia',
+                'risk_multiplier': 2.0
+            },
+            {
+                'condition': 'Heart Failure',
+                'increases_risk_of': 'Hospitalization',
+                'risk_multiplier': 1.8
+            },
+            {
+                'condition': 'Depression',
+                'increases_risk_of': 'Suicide Risk',
+                'risk_multiplier': 2.2
+            },
+            {
+                'condition': 'COPD',
+                'increases_risk_of': 'Hospitalization',
+                'risk_multiplier': 2.0
             },
             
             # Intervention requirements
@@ -301,6 +345,18 @@ class ClinicalKnowledgeGraphBuilder:
             {
                 'condition': 'Substance Use Disorder',
                 'requires_intervention': 'MAT Referral',
+                'urgency': 'high'
+            },
+            {
+                'condition': 'Heart Failure',
+                'requires_intervention': 'Weight Monitoring',
+                'frequency': 'weekly',
+                'urgency': 'high'
+            },
+            {
+                'condition': 'Heart Failure',
+                'requires_intervention': 'Weight Monitoring',
+                'frequency': 'weekly',
                 'urgency': 'high'
             },
             
@@ -395,6 +451,7 @@ class ClinicalKnowledgeGraphBuilder:
         )
         if id_col is None:
             print("No patient identifier found in outcomes; skipping care pathway graph.")
+            self.care_pathway_kg.graph['status'] = 'empty_no_identifier'
             return self.care_pathway_kg
         
         for patient_id, patient_data in data['outcomes_monthly'].groupby(id_col):
@@ -460,6 +517,8 @@ class ClinicalKnowledgeGraphBuilder:
         
         print(f"Care Pathway KG: {self.care_pathway_kg.number_of_nodes()} nodes, "
               f"{self.care_pathway_kg.number_of_edges()} edges")
+        if self.care_pathway_kg.number_of_edges() == 0:
+            self.care_pathway_kg.graph['status'] = 'empty_no_sequences'
         
         return self.care_pathway_kg
     

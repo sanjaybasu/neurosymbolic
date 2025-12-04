@@ -21,6 +21,10 @@ sys.path.append(str(Path(__file__).parent.parent))
 from models.neurosymbolic_reasoner import (
     NeurosymbolicReasoner, ClinicalContext, SymbolicReasoner
 )
+from scripts.data_utils import parse_multiline_csv
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+RL_DATA_DIR = REPO_ROOT / "notebooks" / "rl_vs_llm_safety" / "data"
 
 
 class RealDataEvaluator:
@@ -30,6 +34,19 @@ class RealDataEvaluator:
         """Initialize with knowledge graph directory."""
         self.symbolic = SymbolicReasoner(kg_dir)
         self.results = []
+        # Build lexicons from the clinical rules graph for lightweight NLP
+        self.condition_terms = self._build_terms(prefix="condition:")
+        self.medication_terms = self._build_terms(prefix="medication:")
+    
+    def _build_terms(self, prefix: str) -> List[str]:
+        """Extract node labels with the given prefix from the clinical rules KG."""
+        terms = []
+        for node in self.symbolic.clinical_rules_kg.nodes:
+            if node.startswith(prefix):
+                cleaned = node.replace(prefix, "").replace("_", " ").lower()
+                terms.append(cleaned)
+        # Deduplicate and sort by length to favor longer matches
+        return sorted(set(terms), key=len, reverse=True)
         
     def load_physician_scenarios(self, scenario_path: str) -> pd.DataFrame:
         """Load physician-created scenarios from CSV."""
@@ -38,56 +55,64 @@ class RealDataEvaluator:
         return df
     
     def load_prospective_cases(self, benign_path: str, harm_path: str) -> pd.DataFrame:
-        """Load prospective validation cases."""
-        benign = pd.read_csv(benign_path)
-        benign['case_type'] = 'benign'
+        """Load prospective validation cases with robust parsing."""
+        benign = parse_multiline_csv(Path(benign_path), record_prefixes=["benign_candidate"])
+        benign["case_type"] = "benign"
         
-        harm = pd.read_csv(harm_path)
-        harm['case_type'] = 'harm'
+        harm = parse_multiline_csv(Path(harm_path), record_prefixes=["harm_candidate"])
+        harm["case_type"] = "harm"
         
         combined = pd.concat([benign, harm], ignore_index=True)
         print(f"Loaded {len(combined)} prospective cases ({len(benign)} benign, {len(harm)} harm)")
         return combined
     
     def extract_conditions_from_scenario(self, scenario_text: str) -> List[str]:
-        """Extract medical conditions from scenario text."""
-        # Common Medicaid conditions to detect
-        condition_keywords = {
-            'Chronic Kidney Disease': ['kidney disease', 'ckd', 'renal'],
-            'Pregnancy': ['pregnant', 'pregnancy', 'expecting'],
+        """Extract medical conditions from scenario text using rule lexicon."""
+        import re
+        scenario_lower = scenario_text.lower()
+        matches = []
+        # Flexible lexicon matching
+        fallback = {
+            'Chronic Kidney Disease': ['ckd', 'kidney disease', 'renal'],
+            'Heart Failure': ['heart failure', 'chf', 'congestive'],
             'Diabetes': ['diabetes', 'diabetic', 'blood sugar'],
             'Hypertension': ['hypertension', 'high blood pressure', 'bp'],
             'Asthma': ['asthma', 'wheezing', 'inhaler'],
-            'Heart Failure': ['heart failure', 'chf', 'congestive'],
-            'Depression': ['depression', 'depressed', 'sad'],
-            'Substance Use Disorder': ['substance', 'addiction', 'opioid']
+            'COPD': ['copd', 'chronic obstructive', 'emphysema'],
+            'Depression': ['depression', 'depressed', 'mood'],
+            'Pregnancy': ['pregnant', 'pregnancy', 'expecting'],
+            'Substance Use Disorder': ['opioid', 'substance', 'addiction'],
         }
-        
-        conditions = []
-        scenario_lower = scenario_text.lower()
-        
-        for condition, keywords in condition_keywords.items():
-            if any(kw in scenario_lower for kw in keywords):
-                conditions.append(condition)
-        
-        return conditions
+        for term in self.condition_terms:
+            pattern = rf"\\b{re.escape(term)}\\b"
+            if re.search(pattern, scenario_lower):
+                matches.append(term.title())
+        for label, kws in fallback.items():
+            if any(kw in scenario_lower for kw in kws):
+                matches.append(label)
+        return matches
     
     def extract_medications_from_scenario(self, scenario_text: str) -> List[str]:
-        """Extract medications from scenario text."""
-        medication_keywords = {
-            'NSAIDs': ['nsaid', 'ibuprofen', 'advil', 'motrin', 'aleve', 'naproxen'],
-            'ACE Inhibitors': ['ace inhibitor', 'lisinopril', 'enalapril', 'ramipril'],
-            'Beta Blockers': ['beta blocker', 'metoprolol', 'atenolol', 'propranolol']
-        }
-        
-        medications = []
+        """Extract medications from scenario text using rule lexicon."""
+        import re
         scenario_lower = scenario_text.lower()
-        
-        for medication, keywords in medication_keywords.items():
-            if any(kw in scenario_lower for kw in keywords):
-                medications.append(medication)
-        
-        return medications
+        matches = []
+        fallback = {
+            'NSAIDs': ['nsaid', 'nsaids', 'ibuprofen', 'advil', 'motrin', 'naproxen', 'aleve', 'meloxicam'],
+            'ACE Inhibitors': ['ace inhibitor', 'lisinopril', 'enalapril', 'ramipril'],
+            'Beta Blockers': ['beta blocker', 'metoprolol', 'atenolol', 'propranolol'],
+            'Metformin': ['metformin', 'glucophage'],
+            'Valproate': ['valproate', 'valproic acid', 'depakote'],
+            'Warfarin': ['warfarin', 'coumadin'],
+        }
+        for term in self.medication_terms:
+            pattern = rf"\\b{re.escape(term)}\\b"
+            if re.search(pattern, scenario_lower):
+                matches.append(term.title())
+        for label, kws in fallback.items():
+            if any(kw in scenario_lower for kw in kws):
+                matches.append(label)
+        return matches
     
     def evaluate_scenario(self, scenario_id: str, scenario_text: str, 
                          source: str) -> Dict:
@@ -228,11 +253,11 @@ def main():
     """Run evaluation on real data."""
     
     # Paths
-    kg_dir = "/Users/sanjaybasu/waymark-local/notebooks/neurosymbolic/knowledge_graphs"
-    scenario_library_path = "/Users/sanjaybasu/waymark-local/notebooks/rl_vs_llm_safety/data/scenario_library.csv"
-    benign_cases_path = "/Users/sanjaybasu/waymark-local/notebooks/rl_vs_llm_safety/data/prospective_eval/benign_cases_500.csv"
-    harm_cases_path = "/Users/sanjaybasu/waymark-local/notebooks/rl_vs_llm_safety/data/prospective_eval/harm_cases_500.csv"
-    output_dir = Path("/Users/sanjaybasu/waymark-local/notebooks/neurosymbolic/results")
+    kg_dir = str(Path(__file__).resolve().parent.parent / "knowledge_graphs")
+    scenario_library_path = RL_DATA_DIR / "scenario_library.csv"
+    benign_cases_path = RL_DATA_DIR / "prospective_eval" / "benign_cases_500.csv"
+    harm_cases_path = RL_DATA_DIR / "prospective_eval" / "harm_cases_500.csv"
+    output_dir = REPO_ROOT / "notebooks" / "neurosymbolic" / "results"
     output_dir.mkdir(parents=True, exist_ok=True)
     
     print("=" * 80)
