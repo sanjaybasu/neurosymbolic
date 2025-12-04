@@ -277,7 +277,7 @@ class NeuralRLPolicy(nn.Module):
             nn.Linear(256, 128),
             nn.ReLU(),
             nn.Dropout(0.1),
-            nn.Linear(128, n_actions)
+            nn.Linear(128, self.num_actions)
         )
     
     def forward(self, state: torch.Tensor) -> torch.Tensor:
@@ -287,13 +287,16 @@ class NeuralRLPolicy(nn.Module):
     def get_action_values(self, state: Dict) -> Dict[str, float]:
         """Get Q-values as dictionary."""
         
-        # Convert state dict to tensor (simplified)
-        state_tensor = torch.tensor([
+        # Map a small set of numeric state features into a fixed-length vector
+        features = [
             state.get('age', 0),
             state.get('ed_visits_90d', 0),
             state.get('hosp_admits_180d', 0),
-            # ... other state features
-        ], dtype=torch.float32)
+        ]
+        # Pad/truncate to expected dimensionality to avoid shape errors
+        if len(features) < self.state_dim:
+            features.extend([0] * (self.state_dim - len(features)))
+        state_tensor = torch.tensor(features[: self.state_dim], dtype=torch.float32)
         
         with torch.no_grad():
             q_values = self.forward(state_tensor).numpy()
@@ -324,7 +327,8 @@ class NeurosymbolicReasoner:
         self.symbolic = SymbolicReasoner(kg_dir)
         
         # Load neural policy
-        self.neural = NeuralRLPolicy(state_dim=10, n_actions=9)
+        # Neural policy remains lightweight; keep feature dim small to match get_action_values.
+        self.neural = NeuralRLPolicy(state_dim=3, num_actions=9)
         if rl_checkpoint:
             try:
                 checkpoint = torch.load(rl_checkpoint, map_location='cpu')
@@ -479,7 +483,7 @@ class NeurosymbolicReasoner:
 
 
 def load_neurosymbolic_reasoner(
-    kg_dir: str = "/Users/sanjaybasu/waymark-local/notebooks/neurosymbolic/knowledge_graphs",
+    kg_dir: str = str(Path(__file__).resolve().parent.parent / "knowledge_graphs"),
     rl_checkpoint: str = "/Users/sanjaybasu/waymark-local/notebooks/haco/results/haco/best_model.pt"
 ) -> NeurosymbolicReasoner:
     """Convenience function to load reasoner."""
