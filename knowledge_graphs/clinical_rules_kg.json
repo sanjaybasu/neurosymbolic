@@ -1,0 +1,246 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "node_type": "condition",
+      "id": "condition:Chronic Kidney Disease"
+    },
+    {
+      "node_type": "medication",
+      "id": "medication:NSAIDs"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Pregnancy"
+    },
+    {
+      "node_type": "medication",
+      "id": "medication:ACE Inhibitors"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Asthma"
+    },
+    {
+      "node_type": "medication",
+      "id": "medication:Beta Blockers"
+    },
+    {
+      "node_type": "medication",
+      "id": "medication:Metformin"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Heart Failure"
+    },
+    {
+      "node_type": "medication",
+      "id": "medication:Valproate"
+    },
+    {
+      "node_type": "medication",
+      "id": "medication:Warfarin"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Diabetes"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Cardiovascular Disease"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Hypertension"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Stroke"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Hyperkalemia"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Hospitalization"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Depression"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Suicide Risk"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:COPD"
+    },
+    {
+      "node_type": "intervention",
+      "id": "intervention:HbA1c Monitoring"
+    },
+    {
+      "node_type": "intervention",
+      "id": "intervention:Prenatal Care"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Substance Use Disorder"
+    },
+    {
+      "node_type": "intervention",
+      "id": "intervention:MAT Referral"
+    },
+    {
+      "node_type": "intervention",
+      "id": "intervention:Weight Monitoring"
+    },
+    {
+      "node_type": "condition",
+      "id": "sdoh:Housing Instability"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:ED Utilization"
+    },
+    {
+      "node_type": "condition",
+      "id": "sdoh:Food Insecurity"
+    },
+    {
+      "node_type": "condition",
+      "id": "condition:Diabetes Poor Control"
+    }
+  ],
+  "links": [
+    {
+      "edge_type": "CONTRAINDICATION",
+      "severity": "major",
+      "reason": "Risk of acute kidney injury",
+      "source": "condition:Chronic Kidney Disease",
+      "target": "medication:NSAIDs"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "severity": "moderate",
+      "reason": "Lactic acidosis risk",
+      "source": "condition:Chronic Kidney Disease",
+      "target": "medication:Metformin"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "risk_multiplier": 2.0,
+      "source": "condition:Chronic Kidney Disease",
+      "target": "condition:Hyperkalemia"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "severity": "severe",
+      "reason": "Teratogenic effects",
+      "source": "condition:Pregnancy",
+      "target": "medication:ACE Inhibitors"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "severity": "severe",
+      "reason": "Neural tube defect risk",
+      "source": "condition:Pregnancy",
+      "target": "medication:Valproate"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "severity": "severe",
+      "reason": "Teratogenic effects and fetal bleeding risk",
+      "source": "condition:Pregnancy",
+      "target": "medication:Warfarin"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "frequency": "monthly",
+      "urgency": "high",
+      "source": "condition:Pregnancy",
+      "target": "intervention:Prenatal Care"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "severity": "major",
+      "reason": "Bronchospasm risk",
+      "source": "condition:Asthma",
+      "target": "medication:Beta Blockers"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "severity": "major",
+      "reason": "Fluid retention and decompensation risk",
+      "source": "condition:Heart Failure",
+      "target": "medication:NSAIDs"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "risk_multiplier": 1.8,
+      "source": "condition:Heart Failure",
+      "target": "condition:Hospitalization"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "frequency": "weekly",
+      "urgency": "high",
+      "source": "condition:Heart Failure",
+      "target": "intervention:Weight Monitoring"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "risk_multiplier": 2.5,
+      "source": "condition:Diabetes",
+      "target": "condition:Cardiovascular Disease"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "frequency": "quarterly",
+      "urgency": "medium",
+      "source": "condition:Diabetes",
+      "target": "intervention:HbA1c Monitoring"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "risk_multiplier": 3.0,
+      "source": "condition:Hypertension",
+      "target": "condition:Stroke"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "risk_multiplier": 2.2,
+      "source": "condition:Depression",
+      "target": "condition:Suicide Risk"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "risk_multiplier": 2.0,
+      "source": "condition:COPD",
+      "target": "condition:Hospitalization"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "frequency": null,
+      "urgency": "high",
+      "source": "condition:Substance Use Disorder",
+      "target": "intervention:MAT Referral"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "risk_multiplier": 1.8,
+      "source": "sdoh:Housing Instability",
+      "target": "condition:ED Utilization"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "risk_multiplier": 2.1,
+      "source": "sdoh:Food Insecurity",
+      "target": "condition:Diabetes Poor Control"
+    }
+  ]
+}

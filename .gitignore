@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# LaTeX artifacts
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+
+# Data files (too large for git / PHI risk)
+*.parquet
+*.csv.gz
+trained_models/*.pt
+trained_models/*.pkl
+knowledge_graphs/*.pkl
+knowledge_graphs/patient_kg.json
+data/mixed_splits/mixed_realworld_*.json
+data/mixed_splits/mixed_train.json
+data/mixed_splits/mixed_val.json
+
+# Environment
+.env
+.venv/
+env/
+venv/
+
+# Results / derived outputs (not published)
+results/
+*.results.json

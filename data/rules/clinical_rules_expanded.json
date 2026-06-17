@@ -1,0 +1,438 @@
+{
+  "edges": [
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:nsaids",
+      "target": "condition:chronic_kidney_disease",
+      "provenance": "FDA black box / AGS Beers",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:nsaids",
+      "target": "condition:heart_failure",
+      "provenance": "AGS Beers",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:nsaids",
+      "target": "condition:pregnancy",
+      "provenance": "FDA labeling",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:nsaids",
+      "target": "condition:bleeding_disorder",
+      "provenance": "FDA labeling",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:nsaids",
+      "target": "condition:liver_disease",
+      "provenance": "FDA labeling",
+      "severity": "moderate"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:ace_inhibitor",
+      "target": "condition:pregnancy",
+      "provenance": "FDA black box",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:arb",
+      "target": "condition:pregnancy",
+      "provenance": "FDA labeling",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:statin",
+      "target": "condition:pregnancy",
+      "provenance": "FDA labeling",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:warfarin",
+      "target": "condition:pregnancy",
+      "provenance": "FDA black box",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:glp1",
+      "target": "condition:pregnancy",
+      "provenance": "FDA labeling (semaglutide/tirzepatide pregnancy warning)",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:decongestant",
+      "target": "condition:hypertension",
+      "provenance": "AGS Beers",
+      "severity": "moderate"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:decongestant",
+      "target": "condition:heart_failure",
+      "provenance": "AGS Beers",
+      "severity": "moderate"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:decongestant",
+      "target": "condition:cardiovascular_disease",
+      "provenance": "AGS Beers",
+      "severity": "moderate"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:maoi",
+      "target": "medication_class:dextromethorphan",
+      "provenance": "CPIC",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:maoi",
+      "target": "medication_class:ssri",
+      "provenance": "FDA black box - serotonin syndrome risk",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:albuterol",
+      "target": "condition:cardiovascular_disease",
+      "provenance": "Beta-agonist caution in cardiac disease",
+      "severity": "moderate"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:metformin",
+      "target": "condition:chronic_kidney_disease",
+      "provenance": "FDA labeling - lactic acidosis risk in eGFR <30",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:opioid",
+      "target": "medication_class:benzodiazepine",
+      "provenance": "FDA black box warning - respiratory depression risk",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:opioid",
+      "target": "condition:substance_use_disorder",
+      "provenance": "CDC opioid prescribing guideline - misuse/overdose risk",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:benzodiazepine",
+      "target": "condition:substance_use_disorder",
+      "provenance": "AGS Beers / SAMHSA - misuse/overdose risk",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:sedating_antihistamine",
+      "target": "condition:fall_risk",
+      "provenance": "AGS Beers - anticholinergic/sedation fall risk",
+      "severity": "moderate"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:benzodiazepine",
+      "target": "condition:fall_risk",
+      "provenance": "AGS Beers - sedation fall risk in older adults",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:opioid",
+      "target": "condition:fall_risk",
+      "provenance": "AGS Beers - sedation/dizziness fall risk",
+      "severity": "moderate"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:fluoroquinolone",
+      "target": "condition:seizure_disorder",
+      "provenance": "FDA labeling - CNS excitation/seizure risk",
+      "severity": "moderate"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:valproate",
+      "target": "condition:pregnancy",
+      "provenance": "FDA black box - neural tube defects",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:lithium",
+      "target": "condition:chronic_kidney_disease",
+      "provenance": "FDA labeling - nephrotoxicity; requires renal monitoring",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:lithium",
+      "target": "condition:pregnancy",
+      "provenance": "FDA labeling - Ebstein anomaly risk",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:digoxin",
+      "target": "condition:chronic_kidney_disease",
+      "provenance": "FDA labeling - renal clearance; toxicity risk",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:potassium_sparing_diuretic",
+      "target": "condition:chronic_kidney_disease",
+      "provenance": "FDA labeling - hyperkalemia risk in renal impairment",
+      "severity": "major"
+    },
+    {
+      "edge_type": "CONTRAINDICATION",
+      "source": "medication_class:corticosteroid",
+      "target": "condition:diabetes",
+      "provenance": "Clinical guideline - corticosteroid-induced hyperglycemia",
+      "severity": "moderate"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:diabetes",
+      "target": "condition:cardiovascular_disease",
+      "risk_multiplier": 2.5,
+      "provenance": "Epidemiology cohort"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:hypertension",
+      "target": "condition:stroke",
+      "risk_multiplier": 3.0,
+      "provenance": "Epidemiology cohort"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:chronic_kidney_disease",
+      "target": "condition:heart_failure",
+      "risk_multiplier": 2.0,
+      "provenance": "Epidemiology cohort"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:obesity",
+      "target": "condition:diabetes",
+      "risk_multiplier": 2.3,
+      "provenance": "Epidemiology cohort"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:diabetes",
+      "target": "condition:chronic_kidney_disease",
+      "risk_multiplier": 2.0,
+      "provenance": "Epidemiology cohort - diabetic nephropathy"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:substance_use_disorder",
+      "target": "condition:depression",
+      "risk_multiplier": 2.5,
+      "provenance": "Epidemiology - SUD/depression comorbidity"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:depression",
+      "target": "condition:suicidal_ideation",
+      "risk_multiplier": 3.0,
+      "provenance": "Psychiatric epidemiology"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:substance_use_disorder",
+      "target": "condition:suicidal_ideation",
+      "risk_multiplier": 2.5,
+      "provenance": "SAMHSA epidemiology"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:seizure_disorder",
+      "target": "condition:fall_risk",
+      "risk_multiplier": 3.0,
+      "provenance": "Neurology literature - ictal/postictal falls"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:copd",
+      "target": "condition:heart_failure",
+      "risk_multiplier": 2.0,
+      "provenance": "Epidemiology cohort - cor pulmonale pathway"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:med_overuse",
+      "target": "condition:medication_harm",
+      "risk_multiplier": 3.0,
+      "provenance": "Medication safety guidance"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:med_overuse",
+      "target": "condition:respiratory_exacerbation",
+      "risk_multiplier": 2.5,
+      "provenance": "Medication safety guidance"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:med_access_issue",
+      "target": "condition:medication_harm",
+      "risk_multiplier": 2.0,
+      "provenance": "Medication access safety guidance"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:med_access_issue_insulin",
+      "target": "condition:ketoacidosis_risk",
+      "risk_multiplier": 4.0,
+      "provenance": "Diabetes medication safety"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:med_access_issue_bronchodilator",
+      "target": "condition:respiratory_exacerbation",
+      "risk_multiplier": 3.0,
+      "provenance": "Asthma/COPD safety"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:med_access_issue_glp1",
+      "target": "condition:glycemic_deterioration",
+      "risk_multiplier": 2.5,
+      "provenance": "Diabetes medication access"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:med_access_issue_immuno",
+      "target": "condition:disease_flare",
+      "risk_multiplier": 2.5,
+      "provenance": "Autoimmune therapy access"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:chest_pain",
+      "target": "condition:cardiovascular_disease",
+      "risk_multiplier": 3.0,
+      "provenance": "AHA chest pain guidelines - rule-out MI"
+    },
+    {
+      "edge_type": "INCREASES_RISK",
+      "source": "condition:infection",
+      "target": "condition:medication_harm",
+      "risk_multiplier": 1.5,
+      "provenance": "Clinical guideline - medication interactions during infection"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:diabetes",
+      "target": "intervention:hba1c_monitoring",
+      "frequency": "quarterly",
+      "provenance": "ADA guidelines"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:diabetes",
+      "target": "intervention:statin_if_ascvd_risk",
+      "frequency": "per ACC/AHA",
+      "provenance": "ACC/AHA"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:pregnancy",
+      "target": "intervention:prenatal_care",
+      "frequency": "per obstetric schedule",
+      "provenance": "ACOG guidelines"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:heart_failure",
+      "target": "intervention:daily_weight_monitoring",
+      "frequency": "daily",
+      "provenance": "AHA guidelines"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:med_access_issue",
+      "target": "intervention:med_access_support",
+      "frequency": "urgent",
+      "provenance": "Medication access policy"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:med_overuse",
+      "target": "intervention:medication_safety_review",
+      "frequency": "immediate",
+      "provenance": "Medication safety guidance"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:med_access_issue_insulin",
+      "target": "intervention:urgent_insulin_refill",
+      "frequency": "same day",
+      "provenance": "Diabetes medication safety"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:med_access_issue_bronchodilator",
+      "target": "intervention:urgent_bronchodilator_refill",
+      "frequency": "same day",
+      "provenance": "Asthma/COPD safety"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:suicidal_ideation",
+      "target": "intervention:crisis_intervention",
+      "frequency": "immediate",
+      "provenance": "988 Suicide & Crisis Lifeline / Joint Commission"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:substance_use_disorder",
+      "target": "intervention:sud_treatment_referral",
+      "frequency": "urgent",
+      "provenance": "SAMHSA treatment guidelines"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:seizure_disorder",
+      "target": "intervention:neurology_referral",
+      "frequency": "per neurology schedule",
+      "provenance": "AAN guidelines"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:anaphylaxis_risk",
+      "target": "intervention:epinephrine_access",
+      "frequency": "always carry",
+      "provenance": "AAAAI/ACAAI guidelines"
+    },
+    {
+      "edge_type": "REQUIRES",
+      "source": "condition:chest_pain",
+      "target": "intervention:emergency_evaluation",
+      "frequency": "immediate",
+      "provenance": "AHA chest pain guidelines"
+    }
+  ]
+}
