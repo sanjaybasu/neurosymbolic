@@ -37,9 +37,7 @@ trained_models/*.pt
 trained_models/*.pkl
 knowledge_graphs/*.pkl
 knowledge_graphs/patient_kg.json
-data/mixed_splits/mixed_realworld_*.json
-data/mixed_splits/mixed_train.json
-data/mixed_splits/mixed_val.json
+data/mixed_splits/
 
 # Environment
 .env
@@ -50,3 +48,13 @@ venv/
 # Results / derived outputs (not published)
 results/
 *.results.json
+audit/derived/
+**/audit/derived/
+
+# PHI and patient-derived files (never commit) — defense in depth
+adjudication_packet/
+**/adjudication_packet/
+gold_standard*.csv
+heldout*.csv
+*.csv
+data/real_inputs/

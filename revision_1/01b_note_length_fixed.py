@@ -3,6 +3,7 @@ Handles the perfect separation (Care Coordinator has 0 events) with a binary
 pharmacy indicator + L2-penalized logistic, and reports within-type length effects.
 Reads the per-note frames already produced by script 01 (pharmacy_reviews_per_note.csv)
 and rebuilds the other doc types' length+contraindication from stageB (recompute light)."""
+import os
 import json, sys
 from pathlib import Path
 import numpy as np
@@ -10,7 +11,7 @@ import pandas as pd
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 
-WL = Path("/Users/sanjaybasu/waymark-local")
+WL = Path(os.environ.get("NEUROSYMBOLIC_ROOT", "."))
 REPO = WL / "packaging" / "neurosymbolic_github"
 OUT = WL / "notebooks/neurosymbolic/submission/jmir/revision_1/audit/derived"
 sys.path.append(str(REPO / "models")); sys.path.append(str(REPO / "scripts"))
@@ -23,7 +24,7 @@ import random; random.seed(SEED)
 def build_all():
     from extraction import ClinicalExtractor
     from neurosymbolic_reasoner import SymbolicReasoner, ClinicalContext
-    notes = pd.read_csv(WL / "data/real_inputs/notes/encounter notes.csv", low_memory=False)
+    notes = pd.read_csv(Path(os.environ.get("NEUROSYMBOLIC_NOTES", "data/notes.csv")), low_memory=False)
     notes = notes[notes["text"].str.len() > 50].reset_index(drop=True)
     subsets = {
         "Pharmacy Reviews": notes[notes["encounterType"].isin(["PHARMACY_NEW_PATIENT_REVIEW", "PHARMACIST_CONSULTATION"])],

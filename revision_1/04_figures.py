@@ -4,6 +4,7 @@ Fig 3: neural vs symbolic overlap on pharmacy reviews at threshold 0.50 (canonic
 Fig 4 (new): note-length vs contraindication detection (mechanism for #9).
 Outputs to revision_1/figures/.
 """
+import os
 import json
 from pathlib import Path
 import numpy as np
@@ -11,7 +12,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-R1 = Path("/Users/sanjaybasu/waymark-local/notebooks/neurosymbolic/submission/jmir/revision_1")
+R1 = Path(os.environ.get("NEUROSYMBOLIC_REVISION1", "."))
 DER = R1 / "audit" / "derived"
 FIG = R1 / "figures"
 FIG.mkdir(exist_ok=True)

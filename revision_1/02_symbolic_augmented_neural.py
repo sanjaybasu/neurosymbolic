@@ -11,11 +11,12 @@ reviews (does the symbolic-informed neural model now catch the symbolic-only not
 Establishes and documents ONE training config (reconciles Methods vs code: epochs,
 pos_weight) used for this controlled experiment.
 """
+import os
 import json, sys
 from pathlib import Path
 import numpy as np
 
-WL = Path("/Users/sanjaybasu/waymark-local")
+WL = Path(os.environ.get("NEUROSYMBOLIC_ROOT", "."))
 REPO = WL / "packaging" / "neurosymbolic_github"
 SPLITS = REPO / "data" / "mixed_splits"
 OUT = WL / "notebooks" / "neurosymbolic" / "submission" / "jmir" / "revision_1" / "audit" / "derived"
@@ -144,7 +145,7 @@ def main():
         pr = pd.read_csv(PR_CSV)
         # need note text -> reload from per-note? per-note csv has no text; reload raw subset deterministically
         # Instead, reuse symbolic flags from pr; recompute neural probs requires text -> read raw notes
-        notes = pd.read_csv(WL / "data" / "real_inputs" / "notes" / "encounter notes.csv", low_memory=False)
+        notes = pd.read_csv(Path(os.environ.get("NEUROSYMBOLIC_NOTES", "data/notes.csv")), low_memory=False)
         notes = notes[notes["text"].str.len() > 50].reset_index(drop=True)
         prn = notes[notes["encounterType"].isin(["PHARMACY_NEW_PATIENT_REVIEW", "PHARMACIST_CONSULTATION"])].reset_index(drop=True)
         texts = prn["text"].astype(str).tolist()

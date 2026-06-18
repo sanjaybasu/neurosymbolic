@@ -6,12 +6,13 @@
   S5  Encoder-generalization: BioBERT + PubMedBERT retrained under canonical config (appendix)
 Outputs to revision_1/audit/derived/. PHI-derived; stays local.
 """
+import os
 import json, sys, time
 from pathlib import Path
 import numpy as np
 import pandas as pd
 
-WL = Path("/Users/sanjaybasu/waymark-local")
+WL = Path(os.environ.get("NEUROSYMBOLIC_ROOT", "."))
 REPO = WL / "packaging" / "neurosymbolic_github"
 SPLITS = REPO / "data" / "mixed_splits"
 OUT = WL / "notebooks/neurosymbolic/submission/jmir/revision_1/audit/derived"
@@ -151,7 +152,7 @@ def main():
     tokA, mA, pwA = train_bert(T.MODEL_NAME, train, y_aug.tolist(), d)
     pA_test = bert_predict([r["text"] for r in test], tokA, mA, d)
     # pharmacy reviews re-detection
-    notes = pd.read_csv(WL / "data/real_inputs/notes/encounter notes.csv", low_memory=False)
+    notes = pd.read_csv(Path(os.environ.get("NEUROSYMBOLIC_NOTES", "data/notes.csv")), low_memory=False)
     notes = notes[notes["text"].str.len() > 50].reset_index(drop=True)
     prn = notes[notes["encounterType"].isin(["PHARMACY_NEW_PATIENT_REVIEW", "PHARMACIST_CONSULTATION"])].reset_index(drop=True)
     pr_texts = prn["text"].astype(str).tolist()

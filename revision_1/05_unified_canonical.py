@@ -14,11 +14,12 @@ CIs are exactly reproducible from those predictions + seed).
 Model-independent results (symbolic doc-type Tables 4/5, note-length regression, adjudication)
 are NOT recomputed here; they carry over from stageB/stageD2 and the adjudication scoring.
 """
+import os
 import json, sys, random
 from pathlib import Path
 import numpy as np
 
-WL = Path("/Users/sanjaybasu/waymark-local")
+WL = Path(os.environ.get("NEUROSYMBOLIC_ROOT", "."))
 REPO = WL / "packaging" / "neurosymbolic_github"
 SPLITS = REPO / "data" / "mixed_splits"
 OUT = WL / "notebooks/neurosymbolic/submission/jmir/revision_1/audit/derived"
@@ -188,7 +189,7 @@ def main():
 
     # ---------- pharmacy reviews: M_primary probs + symbolic (aligned) ----------
     print("pharmacy reviews...")
-    notes = pd.read_csv(WL/"data/real_inputs/notes/encounter notes.csv", low_memory=False)
+    notes = pd.read_csv(Path(os.environ.get("NEUROSYMBOLIC_NOTES", "data/notes.csv")), low_memory=False)
     notes = notes[notes["text"].str.len()>50].reset_index(drop=True)
     prn = notes[notes["encounterType"].isin(["PHARMACY_NEW_PATIENT_REVIEW","PHARMACIST_CONSULTATION"])].reset_index(drop=True)
     pr_texts = prn["text"].astype(str).tolist()

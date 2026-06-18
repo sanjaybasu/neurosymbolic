@@ -2,6 +2,7 @@
 JMIR Med Inform ms#93763 Revision 1 — canonical analysis (no retraining).
 
 Single end-to-end pipeline that (a) reproduces every reported manuscript number
+import os
 from one run and (b) produces the new analyses requested by reviewers/editor.
 Reads raw PHI locally; writes derived numeric outputs to revision_1/audit/derived/.
 PHI-derived outputs stay local and NEVER go to the public code repository.
@@ -29,11 +30,11 @@ import pandas as pd
 warnings.filterwarnings("ignore")
 
 # ---------------------------------------------------------------- paths
-WL = Path("/Users/sanjaybasu/waymark-local")
+WL = Path(os.environ.get("NEUROSYMBOLIC_ROOT", "."))
 REPO = WL / "packaging" / "neurosymbolic_github"
 MODEL_PATH = WL / "packaging" / "packaging" / "neurosymbolic_github" / "trained_models" / "clinicalbert_mixed.pt"
-DATA_ROOT = WL / "data" / "real_inputs"
-NOTES_PATH = DATA_ROOT / "notes" / "encounter notes.csv"
+DATA_ROOT = Path(os.environ.get("NEUROSYMBOLIC_DATA", "data"))
+NOTES_PATH = Path(os.environ.get("NEUROSYMBOLIC_NOTES", "data/notes.csv"))
 MEMBER_PATH = DATA_ROOT / "member_attributes.parquet"
 ELIG_PATH = DATA_ROOT / "eligibility.parquet"
 KG_DIR = str(WL / "notebooks" / "neurosymbolic" / "knowledge_graphs")

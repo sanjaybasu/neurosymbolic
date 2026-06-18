@@ -14,6 +14,7 @@ Outputs:
   - figures/figure3_overlap_analysis.png       (overlap heatmap)
 """
 
+import os
 import json
 import sys
 import random
@@ -34,8 +35,8 @@ from train_clinicalbert_hybrid import ClinicalBERTClassifier, MODEL_NAME, MAX_LE
 from transformers import AutoTokenizer
 
 # Paths
-DATA_ROOT = REPO_ROOT.parent.parent / "data" / "real_inputs"
-NOTES_PATH = DATA_ROOT / "notes" / "encounter notes.csv"
+DATA_ROOT = Path(os.environ.get("NEUROSYMBOLIC_DATA", "data"))
+NOTES_PATH = Path(os.environ.get("NEUROSYMBOLIC_NOTES", "data/notes.csv"))
 MEMBER_PATH = DATA_ROOT / "member_attributes.parquet"
 ELIGIBILITY_PATH = DATA_ROOT / "eligibility.parquet"
 KG_DIR = str(REPO_ROOT.parent.parent / "notebooks" / "neurosymbolic" / "knowledge_graphs")
