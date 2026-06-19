@@ -153,7 +153,15 @@ def main():
         if blk and degenerate(blk) and "one_sided_lower_bound" not in blk:
             raise AssertionError(f"degenerate CI on {key}: {blk}")
 
-    (OUT / "verification_bias_estimate.json").write_text(json.dumps(out, indent=2))
+    # The canonical REAL artifact (verification_bias_estimate.json) is owned solely by
+    # score_round2_final.py, which reads the completed rater + reconciliation files. This script reads the
+    # blank packet and therefore produces only DEMO/AWAITING placeholders; to prevent it from silently
+    # clobbering the canonical REAL file, placeholder output goes to a separate filename.
+    fname = "verification_bias_estimate.json" if out.get("mode", "").startswith("REAL") else "verification_bias_estimate_unlabeled.json"
+    (OUT / fname).write_text(json.dumps(out, indent=2))
+    if fname != "verification_bias_estimate.json":
+        print(f"[note] wrote placeholders to {fname}; the canonical REAL verification_bias_estimate.json "
+              f"(owned by score_round2_final.py) was NOT modified.")
     print(json.dumps(out, indent=2))
 
 

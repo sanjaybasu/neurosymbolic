@@ -22,11 +22,11 @@ Each note is processed by two independent components combined at the output by O
 1. Neural component: a Bio_ClinicalBERT encoder with a linear classification head and
    sigmoid activation for binary hazard classification, fine-tuned on physician-authored
    scenarios and operational notes.
-2. Symbolic component: a clinical rules knowledge graph of 63 directed edges
-   (contraindication/interaction, risk-amplification, required-intervention) derived from
-   Clinical Pharmacogenetics Implementation Consortium guidelines, US Food and Drug
-   Administration warnings, and American Geriatrics Society Beers Criteria, with a
-   rule-based entity extractor and sentence-scoped negation.
+2. Symbolic component: a clinical rules knowledge graph of 62 directed edges
+   (30 contraindication/interaction, 19 risk-amplification, 13 required-intervention) derived from
+   US Food and Drug Administration labeling and warnings, the American Geriatrics Society Beers
+   Criteria, and additional society guidelines, with a rule-based entity extractor and
+   sentence-scoped negation.
 3. OR fusion: any symbolic safety signal can raise a note to hazard status; symbolic
    evidence does not lower a neural hazard classification. The two components are
    complementary detectors rather than an integrated model.
