@@ -95,7 +95,7 @@
       "edge_type": "CONTRAINDICATION",
       "source": "medication_class:maoi",
       "target": "medication_class:dextromethorphan",
-      "provenance": "CPIC",
+      "provenance": "FDA labeling - serotonin syndrome risk",
       "severity": "major"
     },
     {

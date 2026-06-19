@@ -3,7 +3,13 @@
 The refinement layer runs AFTER SymbolicReasoner.check_contraindications and suppresses individual
 fired violations that meet a clinically-principled exclusion criterion. The refined flag set is a
 strict subset of the unrefined set, so the refinement can only raise precision (remove clinical false
-alarms); it cannot remove a true contraindication and therefore leaves recall unchanged.
+alarms); it cannot suppress a fired detection that the adjudicators judged actionable, so it does not
+lower recall for the contraindications the layer detects. Whole-note recall can fall marginally when a
+suppressed note happens to contain a separate, previously undetected contraindication (measured in the
+manuscript: 44.1% -> 42.7%). The heuristics are deployment-imperfect: S2's proximity test and S3's
+note-level negation/resolution can, on unseen notes, suppress a genuinely co-prescribed opioid in a
+substance-use-disorder context or a contraindication in an actively pregnant patient; clinician review
+is therefore required before any detection is acted upon.
 
 The five suppression rules encode established clinical knowledge, not patterns fit to any dataset:
   S1  Low-dose/antiplatelet aspirin (read from aspirin's own token; <325 mg, no non-aspirin analgesic
