@@ -64,12 +64,14 @@ def estimate(m_unflagged, n_s, N_minus, m_suppressed, n_suppressed, counts, N):
     TP, FP_v1, FP_v2, _ = counts
     w = N_minus / n_s
     pu, (pu_lo, pu_hi) = m_unflagged / n_s, wilson(m_unflagged, n_s)
-    ps, (ps_lo, ps_hi) = (m_suppressed / n_suppressed if n_suppressed else 0.0), wilson(m_suppressed, n_suppressed)
-
+    # The suppressed stratum is a CENSUS (all n_suppressed notes adjudicated, sampling fraction 1.0):
+    # it has zero sampling variance, so its false-negative contribution is exactly m_suppressed with
+    # NO Wilson term. Applying sampling uncertainty here would wrongly let a strict-subset suppression
+    # lower the v2 recall bound below v1's. All interval width flows from the sampled unflagged stratum.
     FN_v1, FN_v1_lo, FN_v1_hi = pu*N_minus, pu_lo*N_minus, pu_hi*N_minus
-    FN_v2 = pu*N_minus + ps*n_suppressed
-    FN_v2_lo = pu_lo*N_minus + ps_lo*n_suppressed
-    FN_v2_hi = pu_hi*N_minus + ps_hi*n_suppressed
+    FN_v2 = pu*N_minus + m_suppressed
+    FN_v2_lo = pu_lo*N_minus + m_suppressed
+    FN_v2_hi = pu_hi*N_minus + m_suppressed
     TN_un, TN_un_lo, TN_un_hi = (1-pu)*N_minus, (1-pu_hi)*N_minus, (1-pu_lo)*N_minus
 
     def rec(fn):
@@ -85,24 +87,31 @@ def estimate(m_unflagged, n_s, N_minus, m_suppressed, n_suppressed, counts, N):
             out["one_sided_lower_bound"] = round(lo, 4)
         return out
 
-    spec_v1 = TN_un/(TN_un+FP_v1) if (TN_un+FP_v1) else float("nan")
-    spec_v1_ci = [round(TN_un_lo/(TN_un_lo+FP_v1), 4), round(TN_un_hi/(TN_un_hi+FP_v1), 4)]
-    TN_v2, TN_v2_lo, TN_v2_hi = TN_un+n_suppressed, TN_un_lo+n_suppressed, TN_un_hi+n_suppressed
-    # v2 TN reduced by any suppressed-note FN; conservative point uses census FN
-    TN_v2 -= ps*n_suppressed; TN_v2_lo -= ps_hi*n_suppressed; TN_v2_hi -= ps_lo*n_suppressed
-    spec_v2 = TN_v2/(TN_v2+FP_v2)
-    spec_v2_ci = [round(TN_v2_lo/(TN_v2_lo+FP_v2), 4), round(TN_v2_hi/(TN_v2_hi+FP_v2), 4)]
+    def spec_block(tn, tn_lo, tn_hi, fp, m):
+        pt = tn/(tn+fp) if (tn+fp) else float("nan")
+        lo, hi = tn_lo/(tn_lo+fp), tn_hi/(tn_hi+fp)
+        out = {"point": round(pt, 4), "ci95": [round(lo, 4), round(hi, 4)]}
+        if m == 0:  # at 0 missed the Wilson interval on missed-prevalence is one-sided -> so is specificity
+            out["reported_as"] = "one-sided lower bound (0 missed observed); specificity >= lower"
+            out["one_sided_lower_bound"] = round(lo, 4)
+        return out
+
+    # v2 census true negatives = (n_suppressed - m_suppressed) exactly (zero variance)
+    TN_v2 = TN_un + (n_suppressed - m_suppressed)
+    TN_v2_lo = TN_un_lo + (n_suppressed - m_suppressed)
+    TN_v2_hi = TN_un_hi + (n_suppressed - m_suppressed)
 
     return {
         "derived_counts": {"TP": TP, "FP_v1": FP_v1, "FP_v2": FP_v2, "n_suppressed_census": n_suppressed},
         "inputs": {"missed_unflagged_sample": m_unflagged, "n_unflagged_sample": n_s, "N_unflagged": N_minus,
                    "ht_weight": round(w, 4), "missed_suppressed_census": m_suppressed,
+                   "census_variance": "zero (full enumeration); FN contribution = m_suppressed exactly",
                    "arithmetic_check_unflagged_FN_plus_TN": round(FN_v1 + TN_un, 1)},
         "missed_prevalence_unflagged": {"point": round(pu, 4), "wilson95": [round(pu_lo, 4), round(pu_hi, 4)]},
         "recall_v1": rec_block(FN_v1, FN_v1_lo, FN_v1_hi, m_unflagged),
         "recall_v2": rec_block(FN_v2, FN_v2_lo, FN_v2_hi, m_unflagged + m_suppressed),
-        "specificity_v1": {"point": round(spec_v1, 4), "ci95": spec_v1_ci},
-        "specificity_v2": {"point": round(spec_v2, 4), "ci95": spec_v2_ci},
+        "specificity_v1": spec_block(TN_un, TN_un_lo, TN_un_hi, FP_v1, m_unflagged),
+        "specificity_v2": spec_block(TN_v2, TN_v2_lo, TN_v2_hi, FP_v2, m_unflagged),
         "prevalence_actionable": round((TP+FN_v2)/N, 4),
         "ppv_v1": round(TP/(TP+FP_v1), 4), "ppv_v2": round(TP/(TP+FP_v2), 4),
     }

@@ -58,3 +58,6 @@ gold_standard*.csv
 heldout*.csv
 *.csv
 data/real_inputs/
+# allow-list: synthetic, non-PHI scenario library (already tracked) and any explicitly-allowed data file
+!scenario_library.csv
+!data/scenario_library.csv

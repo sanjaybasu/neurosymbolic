@@ -38,7 +38,7 @@ import refinement as R
 
 
 def main():
-    notes = pd.read_csv(Path(os.environ.get("NEUROSYMBOLIC_NOTES", "data/notes.csv")), low_memory=False)
+    notes = pd.read_csv(Path(os.environ.get("NEUROSYMBOLIC_NOTES","data/notes.csv")), low_memory=False)
     notes = notes[notes["text"].str.len() > 50].reset_index(drop=True)
     pr = notes[notes["encounterType"].isin(["PHARMACY_NEW_PATIENT_REVIEW", "PHARMACIST_CONSULTATION"])].reset_index(drop=True)
     dates = pd.to_datetime(pr["dateOfEncounter"], errors="coerce")

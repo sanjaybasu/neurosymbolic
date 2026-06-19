@@ -51,7 +51,7 @@ suppressed_by = R.suppression_tag
 
 
 def main():
-    notes = pd.read_csv(Path(os.environ.get("NEUROSYMBOLIC_NOTES", "data/notes.csv")), low_memory=False)
+    notes = pd.read_csv(Path(os.environ.get("NEUROSYMBOLIC_NOTES","data/notes.csv")), low_memory=False)
     notes = notes[notes["text"].str.len() > 50].reset_index(drop=True)
     pr = notes[notes["encounterType"].isin(["PHARMACY_NEW_PATIENT_REVIEW", "PHARMACIST_CONSULTATION"])].reset_index(drop=True)
     texts = pr["text"].astype(str).tolist()
